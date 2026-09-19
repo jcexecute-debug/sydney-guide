@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시드니 완전정복 가이드 · Sydney Guide</title>
+<meta name="description" content="구글 지도 리뷰 기반 시드니 여행·생활 가이드 — 명소, 해변, 근교, 맛집, 카페, 바, 마켓, 동네, 실용정보 100여 곳 정리">
+<meta property="og:title" content="시드니 완전정복 가이드">
+<meta property="og:description" content="구글 지도 리뷰 기반, 실제 평점과 리뷰 포인트로 정리한 시드니 가이드">
+<style>
+  :root{
+    --bg:#0a0f1e; --card:#121a2e; --card2:#182242; --chip:#1e2a4d;
+    --text:#eaeef7; --muted:#93a1c0; --line:#25314f;
+    --accent:#4f9cff; --accent2:#ffd166; --ok:#38d39f; --warn:#ff9f6b;
+    --radius:16px; --maxw:1040px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    background:radial-gradient(1200px 600px at 75% -10%,#16264a,transparent),var(--bg);
+    background-color:var(--bg); color:var(--text); line-height:1.6;
+  }
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+
+  /* HERO */
+  header.hero{padding:64px 20px 40px; text-align:center; background:linear-gradient(180deg,#0e1730,transparent)}
+  .hero .flag{font-size:2.6rem}
+  .hero .kicker{color:var(--accent2); font-weight:700; letter-spacing:.18em; font-size:.78rem; text-transform:uppercase}
+  .hero h1{font-size:clamp(2.1rem,5.5vw,3.4rem); margin:.25em 0 .15em; line-height:1.08}
+  .hero p{color:var(--muted); max-width:660px; margin:0 auto; font-size:1.05rem}
+  .stats{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:26px}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 18px; min-width:96px}
+  .stat b{display:block; font-size:1.5rem; color:var(--accent)}
+  .stat span{font-size:.78rem; color:var(--muted)}
+
+  /* SEARCH + NAV */
+  .toolbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(12px); background:rgba(10,15,30,.82); border-bottom:1px solid var(--line)}
+  .toolbar .wrap{padding:12px 20px}
+  .search{width:100%; padding:12px 16px; border-radius:12px; border:1px solid var(--line);
+    background:var(--card); color:var(--text); font-size:1rem; outline:none}
+  .search:focus{border-color:var(--accent)}
+  nav.cats{margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; justify-content:center}
+  nav.cats a{color:var(--muted); padding:6px 12px; border-radius:999px; font-size:.88rem; font-weight:600; white-space:nowrap}
+  nav.cats a:hover{background:var(--chip); color:var(--text); text-decoration:none}
+
+  /* SECTIONS */
+  section{padding:44px 0 8px; border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:none}
+  .sec-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+  .sec-head h2{font-size:1.5rem; margin:0}
+  .sec-head .count{color:var(--muted); font-size:.85rem}
+  .sec-sub{color:var(--muted); margin:0 0 22px; font-size:.95rem}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; padding-bottom:36px}
+
+  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+    border-radius:var(--radius); padding:16px 16px 14px; display:flex; flex-direction:column; transition:transform .15s, border-color .15s}
+  .card:hover{transform:translateY(-3px); border-color:var(--accent)}
+  .card .top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+  .card h3{margin:0; font-size:1.08rem; line-height:1.3}
+  .card .en{color:var(--muted); font-size:.8rem; font-weight:500}
+  .rating{flex-shrink:0; text-align:center; background:var(--chip); border-radius:10px; padding:4px 9px; min-width:52px}
+  .rating .num{font-weight:800; font-size:1rem; color:var(--ok)}
+  .rating.mid .num{color:var(--accent2)}
+  .rating.low .num{color:var(--warn)}
+  .rating .rev{display:block; font-size:.64rem; color:var(--muted); margin-top:1px}
+  .meta-row{display:flex; gap:8px; flex-wrap:wrap; margin:9px 0 2px}
+  .pill{font-size:.72rem; padding:2px 9px; border-radius:999px; background:var(--chip); color:var(--muted)}
+  .pill.area{color:var(--text)}
+  .pill.price{color:var(--accent2); font-weight:700}
+  .card p.hl{margin:10px 0 0; font-size:.9rem; color:#d6deee}
+  .card p.watch{margin:8px 0 0; font-size:.82rem; color:var(--muted)}
+  .card p.watch::before{content:"⚠ "; color:var(--warn)}
+  .card .go{margin-top:12px; font-size:.82rem; font-weight:600}
+  .card .go::after{content:" ↗"}
+
+  /* NEIGHBORHOODS */
+  .hoods{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; padding-bottom:36px}
+  .hood{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:15px}
+  .hood h3{margin:0 0 2px; font-size:1.05rem}
+  .hood .en{color:var(--muted); font-size:.78rem}
+  .hood .vibe{display:inline-block; margin:8px 0; font-size:.72rem; padding:2px 9px; border-radius:999px; background:var(--chip); color:var(--accent2); font-weight:700}
+  .hood p{margin:4px 0 0; font-size:.88rem; color:#d6deee}
+  .hood .go{margin-top:10px; font-size:.8rem; display:inline-block}
+
+  /* PRACTICAL */
+  .tips{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; padding-bottom:36px}
+  .tip{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:12px; padding:15px}
+  .tip h3{margin:0 0 6px; font-size:1rem}
+  .tip .ic{font-size:1.15rem; margin-right:6px}
+  .tip p{margin:0; font-size:.88rem; color:#d6deee}
+
+  .noresult{color:var(--muted); padding:20px 0 40px; display:none}
+
+  footer{padding:40px 20px 60px; text-align:center; color:var(--muted); font-size:.9rem}
+  footer .made{margin-top:8px; font-size:.8rem; opacity:.7}
+  .disclaimer{max-width:620px; margin:14px auto 0; font-size:.75rem; color:var(--muted); opacity:.8; line-height:1.5}
+
+  @media(max-width:520px){ section{padding:34px 0 6px} .hero{padding:48px 16px 32px} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="flag">🇦🇺</div>
+    <div class="kicker">Sydney Complete Guide</div>
+    <h1>시드니 완전정복 가이드</h1>
+    <p>구글 지도 평점·리뷰를 기반으로 명소부터 맛집·카페·바·근교까지 한 페이지에 정리했어요. 위 검색창에 아무거나 쳐보세요 — 이름, 동네, 음식 다 됩니다.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <input id="search" class="search" type="search" placeholder="🔍 검색: 본다이, 라멘, 루프탑, 무료, 카브라마타…" autocomplete="off">
+    <nav class="cats" id="cats"></nav>
+  </div>
+</div>
+
+<main class="wrap" id="main"></main>
+<p class="noresult wrap" id="noresult">검색 결과가 없어요. 다른 키워드로 찾아보세요.</p>
+
+<footer>
+  <div>🇦🇺 시드니 완전정복 가이드 — 즐거운 여행 되세요!</div>
+  <div class="made">Static site · GitHub + Vercel 로 배포 · 구글 지도 리뷰 기반 큐레이션</div>
+  <p class="disclaimer">※ 평점과 리뷰 수는 구글 지도 등 공개 리뷰를 참고한 추정치로, 실제와 다를 수 있습니다. 영업시간·가격·운영 여부는 방문 전 반드시 확인하세요.</p>
+</footer>
+
+<script>
+const DATA = {
+  landmarks: [
+    {n:"시드니 오페라 하우스",e:"Sydney Opera House",a:"Circular Quay",r:4.7,rv:"~69,000",p:"무료",hl:"세계에서 가장 상징적인 건축물 중 하나로, 조가비 지붕과 항구 전망이 압도적. 외관 감상·산책은 무료이며 밤 조명이 특히 아름답다는 평.",w:"내부 투어·공연은 별도 유료, 낮엔 관광객이 많으니 이른 아침이나 해질녘 추천.",q:"Sydney Opera House"},
+    {n:"시드니 하버 브리지",e:"Sydney Harbour Bridge",a:"The Rocks",r:4.7,rv:"~50,000",p:"무료",hl:"도보로 건너며 오페라 하우스와 항구 360도 전경을 무료로 즐기는 인생샷 명소. 브리지클라임 정상 등반은 일생일대의 경험이라는 후기.",w:"브리지클라임은 매우 비싸고 3시간가량 소요, 개인 카메라 반입 불가.",q:"Sydney Harbour Bridge"},
+    {n:"달링 하버",e:"Darling Harbour",a:"Darling Harbour",r:4.6,rv:"~58,000",p:"무료",hl:"호주에서 리뷰가 가장 많은 명소로, 항구를 둘러싼 산책로·레스토랑·야경이 활기차고 아름답다는 평. 아이 동반 가족 나들이에 최적.",w:"주변 식당은 관광지 가격대라 다소 비싼 편.",q:"Darling Harbour Sydney"},
+    {n:"왕립 식물원",e:"Royal Botanic Garden",a:"The Domain",r:4.7,rv:"~25,000",p:"무료",hl:"1816년 개원, 호주에서 가장 오래된 과학기관. 항구를 낀 30헥타르 정원이 도심 속 오아시스. 미세스 매쿼리 포인트 전망이 백미.",w:"부지가 넓어 다 둘러보려면 걷는 시간이 꽤 걸리니 편한 신발 추천.",q:"Royal Botanic Garden Sydney"},
+    {n:"더 록스",e:"The Rocks",a:"The Rocks",r:4.6,rv:"~30,000",p:"무료",hl:"시드니에서 가장 오래된 역사 지구. 사암 건물과 좁은 골목, 항구 전망이 어우러진 분위기. 주말 마켓·펍·카페가 사랑받음.",w:"마켓은 토·일요일에만 열리니 방문 요일 확인.",q:"The Rocks Sydney"},
+    {n:"세인트 메리 대성당",e:"St Mary's Cathedral",a:"CBD",r:4.7,rv:"~6,000",p:"무료",hl:"호주에서 가장 큰 고딕 양식 성당. 웅장한 첨탑과 스테인드글라스, 지하 성당 모자이크 바닥이 압도적. 무료 입장.",w:"예배 시간엔 관람이 제한될 수 있으니 방문 전 시간 확인.",q:"St Mary's Cathedral Sydney"},
+    {n:"시드니 타워 아이",e:"Sydney Tower Eye",a:"CBD",r:4.4,rv:"~10,000",p:"$$",hl:"지상 250m 시드니 최고층 전망대. 도시와 항구를 한눈에 담는 360도 파노라마. 스카이워크 야외 체험도 호평.",w:"일부 방향은 고층 빌딩에 가려 오페라 하우스·다리가 잘 안 보인다는 지적, 성수기엔 대기줄.",q:"Sydney Tower Eye"},
+    {n:"시 라이프 시드니 아쿠아리움",e:"SEA LIFE Sydney Aquarium",a:"Darling Harbour",r:4.4,rv:"~22,000",p:"$$$",hl:"듀공·상어·펭귄 등 1만 2천여 마리 해양생물. 수중 터널 관찰이 인상적. 아이 동반 가족에게 특히 인기.",w:"입장료가 비싸고 주말·방학엔 매우 붐비니 온라인 사전 예약 추천.",q:"SEA LIFE Sydney Aquarium"},
+    {n:"퀸 빅토리아 빌딩 (QVB)",e:"Queen Victoria Building",a:"CBD",r:4.6,rv:"~28,000",p:"무료",hl:"1898년 로마네스크 양식 건물. 돔 천장·스테인드글라스와 대형 시계가 '세상에서 가장 아름다운 쇼핑몰'이라는 극찬. 3층 애프터눈 티 추천.",w:"냉방이 약하다는 후기가 있어 한여름엔 다소 답답할 수 있음.",q:"Queen Victoria Building Sydney"},
+    {n:"뉴사우스웨일스 미술관",e:"Art Gallery of NSW",a:"The Domain",r:4.6,rv:"~12,000",p:"무료",hl:"호주 대표 미술관. 원주민 예술과 근현대 회화, 유럽 거장 작품까지 무료 감상. 새 별관(Naala Badu)의 원주민 컬렉션이 볼 만함.",w:"특별 기획전은 별도 유료, 수요일은 밤 10시까지 개관.",q:"Art Gallery of New South Wales"},
+    {n:"타롱가 동물원",e:"Taronga Zoo",a:"Mosman",r:4.6,rv:"~40,000",p:"$$$",hl:"'세계 최고의 전망을 가진 동물원'. 코알라·캥거루를 가까이 보고 물개 쇼·스카이 사파리 케이블카가 인기. 페리로 가는 접근 자체가 즐거움.",w:"경사가 많으니 케이블카로 정상에 올라 내려오며 관람하는 동선 추천.",q:"Taronga Zoo Sydney"},
+    {n:"루나 파크 시드니",e:"Luna Park",a:"Milsons Point",r:4.1,rv:"~13,000",p:"무료",hl:"하버 브리지 옆 레트로 놀이공원. 상징적인 웃는 얼굴 입구와 항구 전망, 무료 입장이 매력. 야경·사진 명소.",w:"입장은 무료지만 놀이기구 이용권은 비싼 편, 운영일·시간이 유동적.",q:"Luna Park Sydney"},
+    {n:"우정의 중국 정원",e:"Chinese Garden of Friendship",a:"Darling Harbour",r:4.5,rv:"~9,000",p:"$",hl:"광저우시가 선물한 전통 정원. 정자·폭포·잉어 연못이 도심 속 고요한 안식처. 전통 찻집 휴식 추천.",w:"규모가 크지 않아 1시간 내외면 충분, 소정의 입장료.",q:"Chinese Garden of Friendship Sydney"},
+    {n:"호주 현대미술관 (MCA)",e:"Museum of Contemporary Art",a:"The Rocks",r:4.5,rv:"~7,000",p:"무료",hl:"서큘러 키 항구변 현대미술관. 상설 전시 무료, 옥상 카페에서 보는 오페라 하우스 전망이 백미. 원주민 현대미술 컬렉션이 강점.",w:"일부 특별 기획전은 유료이니 방문 전 전시 일정 확인.",q:"Museum of Contemporary Art Australia Sydney"}
+  ],
+  beaches: [
+    {n:"본다이 비치",e:"Bondi Beach",a:"Bondi",r:4.6,rv:"~55,000",p:"무료",hl:"황금빛 넓은 백사장과 강한 파도로 서핑·수영 모두 좋고, 시드니 특유의 활기찬 분위기와 해안 산책로가 최고라는 평.",w:"주말·여름 성수기엔 매우 붐비니 평일 아침 일찍 방문 추천.",q:"Bondi Beach Sydney"},
+    {n:"본다이-쿠지 해안 산책로",e:"Bondi to Coogee Walk",a:"Eastern Beaches",r:4.8,rv:"~8,000",p:"무료",hl:"약 6km 절벽길을 따라 여러 해변과 탁 트인 바다 전망이 이어지는 세계 최고의 해안 산책로. 중간중간 수영·카페도.",w:"계단과 오르막이 많으니 편한 신발과 자외선 차단제 필수.",q:"Bondi to Coogee Coastal Walk"},
+    {n:"맨리 비치",e:"Manly Beach",a:"Manly",r:4.6,rv:"~22,000",p:"무료",hl:"서큘러 키에서 페리 20분. 오페라 하우스를 지나는 페리 풍경과 초보자도 즐기기 좋은 부드러운 파도, 해변 마을 분위기가 사랑받음.",w:"본다이만큼의 강렬함은 덜하지만 훨씬 여유로움.",q:"Manly Beach Sydney"},
+    {n:"쿠지 비치",e:"Coogee Beach",a:"Coogee",r:4.6,rv:"~11,000",p:"무료",hl:"웨딩케이크 아일랜드가 파도를 막아줘 잔잔하고 안전한 수영 가능. BBQ·피크닉 시설과 잔디밭, 로큰풀이 가족에게 인기.",w:"붐비긴 하지만 본다이보다는 덜 혼잡하다는 평.",q:"Coogee Beach Sydney"},
+    {n:"브론테 비치",e:"Bronte Beach",a:"Bronte",r:4.6,rv:"~5,500",p:"무료",hl:"본다이와 쿠지 사이 아담한 해변. 잔디 공원과 로큰풀, 인근 브런치 카페가 많아 현지인이 아끼는 조용한 로컬 해변.",w:"규모는 작지만 파도가 세니 수영 시 주의.",q:"Bronte Beach Sydney"},
+    {n:"왓슨스 베이",e:"Watsons Bay",a:"Watsons Bay",r:4.6,rv:"~3,500",p:"무료",hl:"페리로 닿는 항구 마을. 잔잔한 해변과 캠프 코브, 유서 깊은 도일스 피시앤칩스, 항구 전망이 어우러진 여유로운 나들이 코스.",w:"인근 더 갭 절벽 전망대와 묶어 함께 둘러보기 추천.",q:"Watsons Bay Sydney"},
+    {n:"하이드 파크",e:"Hyde Park",a:"CBD",r:4.6,rv:"~17,000",p:"무료",hl:"호주에서 가장 오래된 공원. 아치형 무화과나무 가로수길과 아치볼드 분수, ANZAC 기념관이 있어 도심 한복판의 쉼터.",w:"점심시간엔 직장인들로 붐비니 여유로운 산책은 오전이 좋음.",q:"Hyde Park Sydney"},
+    {n:"센테니얼 파크",e:"Centennial Park",a:"Randwick",r:4.7,rv:"~11,000",p:"무료",hl:"드넓은 잔디밭과 연못, 승마길과 순환 산책로를 갖춘 대형 도심 공원. 조깅·사이클·피크닉을 즐기는 현지인에게 인기.",w:"규모가 넓어 둘러보려면 자전거나 넉넉한 시간이 필요.",q:"Centennial Park Sydney"},
+    {n:"더 갭 전망대",e:"The Gap Lookout",a:"Watsons Bay",r:4.7,rv:"~6,000",p:"무료",hl:"수직 사암 절벽 위에서 태즈먼해와 항구가 한눈에 펼쳐지는 극적인 전망대. 일몰과 고래·돌고래 관찰 명소.",w:"안전 펜스가 일부 시야를 가릴 수 있고 절벽 바람이 강함.",q:"The Gap Watsons Bay"},
+    {n:"바랑가루 리저브",e:"Barangaroo Reserve",a:"Barangaroo",r:4.6,rv:"~8,000",p:"무료",hl:"시드니 사암과 7만 5천 그루 자생 식물로 재조성된 항구 곶. 하버브리지 전망과 조용한 산책로, 원주민 역사가 어우러진 힐링 공간.",w:"나무가 아직 어려 맑은 날엔 그늘이 부족하고 더울 수 있음.",q:"Barangaroo Reserve Sydney"},
+    {n:"닐슨 파크 (샤크 비치)",e:"Nielsen Park",a:"Vaucluse",r:4.7,rv:"~3,500",p:"무료",hl:"상어 그물로 보호되는 잔잔한 항구 해변과 넓은 잔디 공원, 역사적인 그레이클리프 하우스. 피크닉·물놀이 좋은 숨은 명소.",w:"주말 여름철엔 주차가 매우 어려우니 대중교통 이용.",q:"Nielsen Park Vaucluse"},
+    {n:"셸리 비치",e:"Shelly Beach",a:"Manly",r:4.7,rv:"~3,000",p:"무료",hl:"해양보호구역 안 서향 해변. 문어 등 풍부한 해양 생물로 스노클링·다이빙 명소이자 맨리에서 이어지는 산책로가 사랑받음.",w:"여름 주말엔 주차가 거의 불가능하니 맨리에서 걸어오는 게 좋음.",q:"Shelly Beach Manly"},
+    {n:"스핏 브리지-맨리 산책로",e:"Spit to Manly Walk",a:"Mosman → Manly",r:4.8,rv:"~2,500",p:"무료",hl:"약 10km 항구 해안과 부시랜드, 숨은 해변과 원주민 암각화를 지나는 하버 국립공원 트레일. 다양한 항구 전망이 일품.",w:"중급 난이도 3~4시간, 물·간식 챙기고 반려견 동반 불가.",q:"Spit Bridge to Manly Walk"},
+    {n:"발모럴 비치",e:"Balmoral Beach",a:"Mosman",r:4.6,rv:"~4,000",p:"무료",hl:"잔잔한 항구 해변으로 파도가 약해 가족 물놀이에 좋고, 소나무 그늘 산책로와 인근 고급 카페·레스토랑, 로키 포인트 전망이 매력.",w:"인기 지역이라 주말 주차와 식당 예약이 붐빌 수 있음.",q:"Balmoral Beach Sydney"}
+  ],
+  daytrips: [
+    {n:"세 자매봉 (에코 포인트)",e:"Three Sisters",a:"Katoomba · 기차 2시간",r:4.7,rv:"~25,000",p:"무료",hl:"제이미슨 계곡 위로 솟은 세 바위 봉우리를 담는 블루마운틴 최고 절경. 일몰 무렵 황금빛으로 물드는 모습이 인기.",w:"주차료가 비싸고 관광버스로 붐비니 이른 아침이나 늦은 오후 방문.",q:"Echo Point Lookout Three Sisters Katoomba"},
+    {n:"시닉 월드",e:"Scenic World",a:"Katoomba · 2시간",r:4.5,rv:"~20,000",p:"$$$",hl:"세계에서 가장 가파른 철도, 유리 바닥 케이블카, 우림 산책로를 한 번에. 계곡·폭포 전망이 압도적이고 직원이 친절하다는 평.",w:"요금이 비싸고 주말엔 대기줄이 기니 평일 온라인 예매 추천.",q:"Scenic World Katoomba"},
+    {n:"웬트워스 폭포",e:"Wentworth Falls",a:"Blue Mountains · 2시간",r:4.7,rv:"~5,000",p:"무료",hl:"제이미슨 계곡으로 187m를 3단으로 떨어지는 웅장한 폭포. 여러 전망대를 잇는 산책로에서 절경을 두루 감상.",w:"비 온 뒤 며칠 내 가면 수량이 풍부해 가장 장관.",q:"Wentworth Falls Lookout Blue Mountains"},
+    {n:"제놀란 동굴",e:"Jenolan Caves",a:"S. Blue Mountains · 차 3시간",r:4.6,rv:"~7,000",p:"$$",hl:"세계에서 가장 오래된 석회암 동굴 중 하나. 수억 년에 걸쳐 형성된 종유석·석순을 가이드 투어로. 루카스 케이브 투어가 특히 호평.",w:"접근로가 좁고 급커브가 많으니 서행, 방문 전 운영 상태 확인.",q:"Jenolan Caves NSW"},
+    {n:"헌터 밸리 와인 산지",e:"Hunter Valley",a:"North · 차 2~2.5시간",r:4.6,rv:"~10,000",p:"$$",hl:"호주에서 가장 오래된 와인 산지 중 하나. 포도밭 사이 부티크 셀러도어와 유명 레스토랑에서 시음과 긴 점심. 야생 캥거루도.",w:"대중교통이 불편하니 하루 와인 투어를 이용하거나 자차로 아침 일찍.",q:"Hunter Valley Gardens Pokolbin"},
+    {n:"로열 국립공원 (피겨 에이트 풀)",e:"Figure Eight Pools",a:"South · 차 1시간+트레킹",r:4.6,rv:"~4,000",p:"$",hl:"해안 암반에 자연적으로 파인 8자 물웅덩이. 왕복 약 7km 트레킹 끝의 독특한 자연 명소. 왈라비 등 야생동물도.",w:"반드시 썰물 시간에 맞춰 가고, 파도가 위험하니 바다를 등지지 말 것.",q:"Figure Eight Pools Royal National Park"},
+    {n:"씨 클리프 브리지",e:"Sea Cliff Bridge",a:"Coalcliff · 차 1시간",r:4.7,rv:"~8,000",p:"무료",hl:"절벽을 피해 바다 위로 뻗은 665m 곡선 다리. 드라이브·도보로 건너며 일라와라 해안 절경을. 겨울엔 고래도.",w:"주차 공간이 매우 좁으니 다리를 건넌 뒤 유턴해 갓길에 세우고 걷기.",q:"Sea Cliff Bridge Coalcliff"},
+    {n:"팜 비치 & 바렌조이 등대",e:"Palm Beach",a:"N. Beaches · 차 1~1.5시간",r:4.6,rv:"~5,000",p:"무료",hl:"최북단 곶의 등대까지 짧지만 가파른 트레킹을 오르면 피트워터와 태평양이 한눈에. 드라마 '홈 앤 어웨이' 배경으로도 유명.",w:"올라갈 땐 계단, 내려올 땐 완만한 길, 주차료가 비싼 점 감안.",q:"Barrenjoey Lighthouse Palm Beach"},
+    {n:"포트 스티븐스 & 스톡턴 모래언덕",e:"Port Stephens",a:"North · 차 2.5시간",r:4.6,rv:"~6,000",p:"$$$",hl:"남반구 최대 이동 모래언덕에서 4WD·샌드보딩, 넬슨 베이에서 야생 돌고래 크루즈(발견율 약 97%). 돌고래가 배 가까이 온다는 후기.",w:"샌드보딩과 돌고래 크루즈를 묶은 시드니 출발 데이투어가 편리.",q:"Stockton Sand Dunes Port Stephens"},
+    {n:"키아마 블로홀",e:"Kiama Blowhole",a:"S. Coast · 기차 2.5시간",r:4.5,rv:"~10,000",p:"무료",hl:"세계에서 가장 큰 블로홀 중 하나. 파도가 바위 틈으로 솟구쳐 물기둥을 뿜는 장관. 등대·소나무·피크닉 명소가 어우러진 해안 마을.",w:"물기둥은 바람·조수가 맞아야 크게 솟구치니 근처 리틀 블로홀도 함께.",q:"Kiama Blowhole"},
+    {n:"베리 (마을)",e:"Berry",a:"Shoalhaven · 차 2시간",r:4.6,rv:"~3,000",p:"$",hl:"목가적 언덕에 둘러싸인 유서 깊은 마을. 부티크 상점·카페·수상 경력 레스토랑이 모여 미식과 산책에 좋음. 55년 전통 '베리 도넛 밴'이 명물.",w:"주말엔 붐비니 아침 9시 전 도착해 여유롭게.",q:"Berry NSW town centre"},
+    {n:"센트럴 코스트 (테리걸 & 부디)",e:"Central Coast",a:"North · 차/기차 1~1.5시간",r:4.6,rv:"~8,000",p:"무료",hl:"해변·호수·국립공원이 이어지는 지역. 테리걸 해안 산책로와 부디 국립공원 트레킹이 인기. 더 엔트런스 펠리컨 먹이주기도 명물.",w:"부디 코스탈 워크는 계단이 많으니 좋은 신발 필수.",q:"Bouddi Coastal Walk Central Coast"}
+  ],
+  seafood: [
+    {n:"퀘이",e:"Quay Restaurant",a:"Circular Quay",r:4.5,rv:"~5,500",p:"$$$$",hl:"피터 길모어 셰프의 3-햇 모던 오스트레일리안 파인다이닝. 하버브리지·오페라 하우스 전망과 시그니처 '스노우 에그' 디저트가 유명.",w:"테이스팅 1인 $300 이상으로 매우 비싸며 예약은 몇 달 전부터.",q:"Quay Restaurant Sydney"},
+    {n:"세인트 피터",e:"Saint Peter",a:"Paddington",r:4.6,rv:"~700",p:"$$$$",hl:"'비늘부터 꼬리까지' 철학으로 생선을 드라이에이징해 버리는 부위 없이 활용하는 세계적 해산물 레스토랑. 그날 잡힌 생선으로 매일 바뀌는 메뉴.",w:"10코스 디너가 1인 약 $395로 예약 필수, 바 좌석은 워크인만.",q:"Saint Peter Paddington Sydney"},
+    {n:"아이스버그스 다이닝 룸",e:"Icebergs Dining Room",a:"Bondi",r:4.4,rv:"~4,500",p:"$$$$",hl:"본다이 비치를 내려다보는 절벽 위 모던 이탈리안. 블루핀 참치 크루도와 시그니처 마티니, 탁 트인 바다 전망이 매력.",w:"음식보다 전망 값이라는 평도, 가격이 높으니 창가 자리는 미리 예약.",q:"Icebergs Dining Room Bondi"},
+    {n:"도일스 온 더 비치",e:"Doyles on the Beach",a:"Watsons Bay",r:4.1,rv:"~4,500",p:"$$$",hl:"1885년부터 이어온 왓슨스베이 해산물 명소. 도심 스카이라인이 보이는 해변 전망이 일품. 클래식한 피시 앤 칩스가 대표.",w:"가격이 비싼 편이라 저렴하게는 근처 도일스 테이크아웃 이용.",q:"Doyles on the Beach Watsons Bay"},
+    {n:"아리아",e:"Aria",a:"Circular Quay",r:4.5,rv:"~1,900",p:"$$$$",hl:"맷 모런 셰프의 2-햇 파인다이닝. 오페라 하우스·항구가 바로 보이는 자리에서 20년 넘게 최고 수준을. 제철 식재료와 흠잡을 데 없는 서비스.",w:"격식 있는 분위기에 가격대가 높으니 특별한 날 방문·사전 예약.",q:"Aria Restaurant Sydney Circular Quay"},
+    {n:"베넬롱",e:"Bennelong",a:"Opera House",r:4.5,rv:"~1,500",p:"$$$$",hl:"오페라 하우스 조가비 지붕 아래 자리한 퀘이의 자매 레스토랑. 호주산 식재료와 와인, 전통 호주 디저트를 재해석한 메뉴가 유명.",w:"3코스 약 $225의 고가, 명소인 만큼 예약이 빨리 마감.",q:"Bennelong Restaurant Sydney Opera House"},
+    {n:"카탈리나",e:"Catalina",a:"Rose Bay",r:4.4,rv:"~1,600",p:"$$$$",hl:"로즈베이 물가에서 수상비행기가 드나드는 하버 전망을 즐기는 30년 전통 레스토랑. 갓 까낸 시드니 록 오이스터와 팬프라이드 스내퍼가 대표.",w:"고급 레스토랑이라 가격이 높고 주말·연휴엔 특히 붐비니 예약.",q:"Catalina Rose Bay Sydney"},
+    {n:"시드니 피시 마켓",e:"Sydney Fish Market",a:"Pyrmont",r:4.3,rv:"~45,000",p:"$$",hl:"남반구 최대 규모 수산시장. 신선한 오이스터·사시미, 갓 조리한 새우·랍스터를 합리적 가격에. 오이스터 신선도와 가성비가 극찬.",w:"점심엔 매우 붐비고 자리 잡기 어려우며 음식 노리는 갈매기 조심.",q:"Sydney Fish Market Pyrmont"},
+    {n:"록풀 바 앤 그릴",e:"Rockpool Bar & Grill",a:"CBD",r:4.4,rv:"~3,000",p:"$$$$",hl:"아르데코 헤리티지 건물의 세계 톱10 스테이크하우스. 직접 드라이에이징한 블랙모어 와규와 케이프그림 비프가 시그니처. 방대한 와인 리스트.",w:"스테이크가 1인 $100 이상으로 매우 비싸며 가성비 아쉬움 후기도.",q:"Rockpool Bar and Grill Sydney"},
+    {n:"노마드",e:"Nomad",a:"Surry Hills",r:4.6,rv:"~1,400",p:"$$$",hl:"지중해·중동에서 영감받아 장작불로 조리하는 서리힐스 인기 레스토랑. 활기찬 셰어 플레이트 스타일, 하우스메이드 샤퀴테리와 우드파이어드 플랫브레드.",w:"인기가 많아 예약 권장, 바쁜 시간엔 서빙이 다소 느릴 수 있음.",q:"Nomad Restaurant Surry Hills Sydney"},
+    {n:"미스터 웡",e:"Mr. Wong",a:"CBD",r:4.4,rv:"~9,000",p:"$$$",hl:"댄 홍 셰프의 고급 광둥식 레스토랑. 뒷골목에 숨은 240석 세련된 공간. 랍스터·관자 만두와 딤섬, 베이징덕이 시드니 최고 수준.",w:"항상 붐비는 인기 맛집이라 예약 필수.",q:"Mr Wong Sydney"},
+    {n:"필루 앳 프레시워터",e:"Pilu at Freshwater",a:"Freshwater",r:4.6,rv:"~1,200",p:"$$$",hl:"프레시워터 해변을 바라보는 정통 사르데냐 요리. 신선한 지역 해산물과 수제 파스타, 시그니처 애저돼지 통구이가 강력 추천.",w:"노던비치스에 있어 시내에서 다소 멀고 예약 권장.",q:"Pilu at Freshwater Sydney"},
+    {n:"션스 (Sean's)",e:"Sean's Panaroma",a:"North Bondi",r:4.5,rv:"~350",p:"$$$",hl:"노스본다이 언덕 위 45석 소박한 명소. 30년 넘게 오너 농장 식재료로 정직한 제철 요리. 카르파초와 명물 로스트 치킨이 사랑받음.",w:"좌석이 적어 예약 필수, 고급 식재료라 가격은 다소 높은 편.",q:"Sean's Panaroma Bondi"},
+    {n:"닉스 시푸드 레스토랑",e:"Nick's Seafood",a:"Darling Harbour",r:4.1,rv:"~4,500",p:"$$$",hl:"달링하버 코클베이 워프의 랜드마크 해산물 레스토랑. 수상 전망과 활기찬 분위기, 매일 피시마켓에서 공수한 해산물 플래터가 푸짐.",w:"해산물 가격이 비싼 편이며 서비스 만족도가 다소 들쭉날쭉.",q:"Nick's Seafood Restaurant Darling Harbour"}
+  ],
+  asian: [
+    {n:"검샤라 라멘",e:"Gumshara Ramen",a:"Chinatown",r:4.3,rv:"~4,500",p:"$$",hl:"돼지뼈 120kg로 7일간 우려낸 초진한 돈코츠 라멘. 국물이 걸쭉해 '진흙 라멘'이라 불릴 만큼 묵직한 감칠맛.",w:"현금만 받고 피크엔 줄이 기니 오픈 직후 방문 추천.",q:"Gumshara Ramen Haymarket Sydney"},
+    {n:"찻 타이",e:"Chat Thai",a:"Thaitown",r:4.2,rv:"~4,000",p:"$$",hl:"1989년부터 이어온 시드니 대표 정통 타이 음식점. 숯불 치킨(가이양)과 크라잉 타이거가 시그니처. 현지 태국인도 즐겨 찾음.",w:"오픈부터 새벽까지 대기 줄이 끊이지 않으니 늦은 밤 supper 시간대를.",q:"Chat Thai Haymarket Sydney"},
+    {n:"말레이 차이니즈 테이크어웨이",e:"Malay Chinese Takeaway",a:"CBD",r:4.1,rv:"~1,500",p:"$",hl:"1987년부터 운영된 시드니 최고 락사 맛집. 진하고 크리미한 락사가 11~13종. 하이난 치킨라이스와 하미도 인기.",w:"점심 줄이 길고 저녁·일요일은 문을 닫으니 시간 확인 필수.",q:"Malay Chinese Takeaway Hunter St Sydney"},
+    {n:"마릭빌 포크 롤",e:"Marrickville Pork Roll",a:"Marrickville",r:4.5,rv:"~2,500",p:"$",hl:"시드니 최고 반미로 손꼽히는 허름한 테이크아웃 노포. 바삭한 크래클링 포크 반미가 최고 인기. $11 안팎 가성비.",w:"긴 줄이 있어도 회전이 매우 빨라 몇 분이면 받을 수 있음.",q:"Marrickville Pork Roll Illawarra Rd"},
+    {n:"포 타우 베이",e:"Pho Tau Bay",a:"Cabramatta",r:4.4,rv:"~1,300",p:"$",hl:"1980년부터 이어온 카브라마타 최고령 쌀국수 노포. 깊고 진한 육수와 넉넉한 고기의 소고기 포가 시그니처. '시드니 최고의 포'로 여러 번 선정.",w:"현금만 받고 주말엔 대기·주차 전쟁이니 아침 일찍.",q:"Pho Tau Bay Cabramatta"},
+    {n:"딘타이펑",e:"Din Tai Fung",a:"CBD (Westfield)",r:4.2,rv:"~3,500",p:"$$",hl:"18겹 이상으로 빚어 미슐랭 스타를 받은 샤오롱바오로 유명한 글로벌 딤섬 명가. 육즙 가득한 소룡포와 슈마이가 대표.",w:"웨이팅이 길어 진동벨 받고 쇼핑몰을 돌며 기다리는 걸 추천.",q:"Din Tai Fung Westfield Sydney"},
+    {n:"차이니즈 누들 레스토랑",e:"Chinese Noodle Restaurant",a:"Chinatown",r:4.1,rv:"~2,000",p:"$",hl:"천장에 매달린 플라스틱 포도로 유명한 하이마켓의 저가 만두 성지. 직접 뽑는 신장식 수타면과 저렴한 물만두가 인기.",w:"점심엔 대기가 있고 프린스 센터 안 비슷한 가게가 많으니 주의.",q:"Chinese Noodle Restaurant Prince Centre Haymarket"},
+    {n:"난징 덤플링",e:"Nanjing Dumpling",a:"Chinatown",r:4.5,rv:"~1,500",p:"$",hl:"드물게 난징식 샤오롱바오를 내는 작은 노포. 상하이식보다 피가 두툼하고 살짝 달콤한 소룡포가 특징. 난징 소금오리도 별미.",w:"가게가 매우 좁고 결제 방식 안내가 부족할 수 있으니 미리 확인.",q:"Nanjing Dumpling Haymarket Sydney"},
+    {n:"장타발",e:"Jang Ta Bal",a:"Strathfield",r:4.3,rv:"~2,000",p:"$$",hl:"코리안 BBQ가 뜨기 전부터 자리 잡은 스트라스필드 숯불구이 명가. 와규 포함 고품질 고기와 양념 차돌양지, 흥겨운 분위기.",w:"인기가 많아 피크 시간엔 대기가 길 수 있음.",q:"Jang Ta Bal Strathfield"},
+    {n:"레드 페퍼 비스트로",e:"Red Pepper Bistro",a:"Strathfield",r:4.3,rv:"~1,000",p:"$$",hl:"시드니 양념치킨의 원조격 노포. 두 번 튀겨 겉은 바삭하고 속은 촉촉한 코리안 프라이드 치킨이 시그니처. 마늘·매콤한 감칠맛이 일품.",w:"숨은 맛집이라 위치를 찾기 어려울 수 있으니 지도 확인.",q:"Red Pepper Bistro Strathfield"},
+    {n:"종가집",e:"Jonga Jip Korean BBQ",a:"Eastwood",r:4.1,rv:"~1,300",p:"$$",hl:"한인 커뮤니티가 모이는 이스트우드 로우 스트리트의 코리안 BBQ 노포. 최대 10가지 푸짐한 반찬으로 유명. 불고기·김치찌개도 인기.",w:"피크 시간엔 대기가 길고 근처 비슷한 지점이 있으니 로우 스트리트점 확인.",q:"Jonga Jip Korean BBQ Eastwood"},
+    {n:"코이 베트남 이터리",e:"Khoi Vietnamese Eatery",a:"Marrickville",r:4.5,rv:"~1,200",p:"$$",hl:"가족이 운영하는 인기 베트남 식당. 균형 잡힌 맑은 육수의 소고기 포와 분보후에가 호평. 숯불 돼지갈비 덮밥(껌 승)도 시그니처.",w:"주말엔 대기가 있을 수 있으니 조금 일찍 방문.",q:"Khoi Vietnamese Eatery Marrickville"},
+    {n:"야 말레이시아",e:"ya Malaysia",a:"Chatswood",r:3.9,rv:"~600",p:"$",hl:"차츠우드 인터체인지 푸드코트의 인기 말레이시아 맛집으로 '차츠우드 최고의 락사'로 불림. 하이난 치킨라이스와 차 궤 테우도 가성비.",w:"붐빌 땐 이름·인원을 적고 번호표를 받아 기다림.",q:"ya Malaysia Chatswood The Precinct"},
+    {n:"탄 비엣",e:"Tan Viet",a:"Cabramatta",r:4.4,rv:"~3,000",p:"$",hl:"카브라마타 대표 베트남 맛집. 겉이 유리처럼 바삭한 '크리스피 스킨 치킨'과 국수 조합이 시그니처. 저렴한 가격과 인기로 늘 붐비는 성지.",w:"웨이팅이 길고 현금 위주이니 여유 있게 방문.",q:"Tan Viet Novelty Restaurant Cabramatta"},
+    {n:"시안 퀴진",e:"Xi'an Cuisine",a:"Chinatown",r:4.2,rv:"~800",p:"$",hl:"하이마켓의 소박한 시안(西安) 음식 전문점. 직접 뽑은 수타 뱡뱡면과 큐민 양고기가 인기. 대부분 $13 안팎의 가성비.",w:"좌석이 협소한 홀인더월 매장이라 대기가 생길 수 있음.",q:"Xi'an Cuisine Hay St Haymarket Sydney"}
+  ],
+  cafes: [
+    {n:"버크 스트리트 베이커리",e:"Bourke Street Bakery",a:"Surry Hills",r:4.5,rv:"~3,500",p:"$$",hl:"2004년 문을 연 서리힐스의 전설적인 베이커리. 바삭한 페이스트리와 러스틱 브레드가 명물. 포크&펜넬 소시지롤과 진저 크렘브륄레 타르트가 인기.",w:"좌석이 거의 없는 테이크아웃 위주, 점심엔 줄이 길어 정오 전 방문.",q:"Bourke Street Bakery Surry Hills Sydney"},
+    {n:"루벤 힐스",e:"Reuben Hills",a:"Surry Hills",r:4.4,rv:"~2,500",p:"$$",hl:"직접 로스팅하는 남미 싱글오리진 커피와 라틴풍 브런치. 인더스트리얼 감성의 마이크로 로스터리. 프라이드 치킨과 샥슈카가 인기.",w:"주말·피크엔 대기가 길고 가격대가 다소 높은 편.",q:"Reuben Hills Surry Hills Sydney"},
+    {n:"더 그라운즈 오브 알렉산드리아",e:"The Grounds of Alexandria",a:"Alexandria",r:4.1,rv:"~5,600",p:"$$",hl:"1920년대 산업 부지를 개조한 정원형 카페 겸 로스터리. 화려한 꽃 장식과 텃밭, 포토제닉한 분위기로 세계에서 가장 인스타에 많이 올라온 카페.",w:"관광객이 몰려 주말엔 매우 붐비고 대기가 기니 이른 시간 방문.",q:"The Grounds of Alexandria Sydney"},
+    {n:"싱글 오",e:"Single O",a:"Surry Hills",r:4.5,rv:"~1,500",p:"$$",hl:"2003년부터 이어진 스페셜티 커피의 선구자. Reservoir 블렌드와 싱글오리진, 탭 콜드브루가 유명. 슬릭한 디자인의 아침 메뉴도 호평.",w:"커피는 훌륭하지만 음식 가격이 다소 비싸다는 평.",q:"Single O Surry Hills Sydney"},
+    {n:"빌즈 달링허스트",e:"bills Darlinghurst",a:"Darlinghurst",r:4.2,rv:"~2,200",p:"$$$",hl:"1992년 문을 연 올데이 카페의 원조. 커뮤널 테이블 문화를 만든 곳. 바나나·허니콤 버터를 곁들인 리코타 핫케이크가 전 세계적 시그니처.",w:"피크엔 매우 붐비고 일부 리뷰에서 서비스 편차를 지적.",q:"bills Darlinghurst Sydney"},
+    {n:"데본 카페",e:"Devon Cafe",a:"Surry Hills",r:4.3,rv:"~2,000",p:"$$",hl:"파인다이닝 출신 셰프들이 만드는 아시아풍 창작 브런치. 미소 연어와 장어 크로켓이 어우러진 'Breakfast with the Sakuma's'가 대표.",w:"인기가 많아 피크 시간대엔 대기 줄이 생김.",q:"Devon Cafe Surry Hills Sydney"},
+    {n:"소노마 베이커리",e:"Sonoma Bakery",a:"Bondi",r:4.3,rv:"~900",p:"$$",hl:"시드니 전역 카페에 납품될 만큼 사워도우의 기준으로 통하는 아티장 베이커리. 특유의 블리스터 크러스트 사워도우와 크루아상, 커피가 호평.",w:"지점마다 편차가 있으니 갓 구운 시간대에 방문.",q:"Sonoma Bakery Bondi Sydney"},
+    {n:"파라마운트 커피 프로젝트",e:"Paramount Coffee Project",a:"Surry Hills",r:4.2,rv:"~3,700",p:"$$",hl:"아르데코 건물의 채광 좋은 공간에서 4~6주마다 로스터가 바뀌는 멀티 로스터 프로그램. 버터밀크 프라이드치킨 와플과 아보카도 토스트가 인기.",w:"비슷한 퀄리티 대비 가격이 살짝 높은 편.",q:"Paramount Coffee Project Surry Hills Sydney"},
+    {n:"브루타운 뉴타운",e:"Brewtown Newtown",a:"Newtown",r:4.1,rv:"~2,500",p:"$$",hl:"옛 창고를 개조한 넓은 공간에서 직접 로스팅한 커피와 크루아상-도넛 하이브리드 '브루넛'으로 유명. 블랙 메이플 시럽 프렌치 토스트도 추천.",w:"예전보다 페이스트리 신선도가 들쑥날쑥하다는 최근 후기.",q:"Brewtown Newtown Sydney"},
+    {n:"검션 바이 커피 알케미",e:"Gumption by Coffee Alchemy",a:"CBD",r:4.3,rv:"~2,000",p:"$",hl:"역사적인 스트랜드 아케이드의 커피 순수주의자 성지. 음식 없이 커피만. 스무스한 크레마의 플랫화이트와 피콜로가 CBD 최고로 꼽힘.",w:"음식·실내 좌석이 없고 항상 줄이 기니 테이크아웃에 적합.",q:"Gumption by Coffee Alchemy Strand Arcade Sydney"},
+    {n:"스피도스 카페",e:"Speedo's Cafe",a:"North Bondi",r:4.2,rv:"~1,600",p:"$$",hl:"노스 본다이 해변을 마주한 비치사이드 브런치 명소. 알록달록한 팬케이크와 아사이볼, 채식/비건 옵션이 풍부. 향긋한 커피도 호평.",w:"좌석이 협소하고 붐비며 가격이 다소 높은 편이라 이른 방문 추천.",q:"Speedos Cafe North Bondi Sydney"},
+    {n:"브릭필즈",e:"Brickfields",a:"Chippendale",r:4.4,rv:"~700",p:"$$",hl:"Mecca 커피 창업자가 함께 만든 코너 베이커리 카페. 시드니 최고로 꼽히는 사워도우가 명물. 리코타·꿀을 올린 무화과 호두 토스트가 인기.",w:"공간이 작아 아침·점심엔 붐비고 커피 평은 다소 엇갈림.",q:"Brickfields Chippendale Sydney"},
+    {n:"더 파인 푸드 스토어",e:"The Fine Food Store",a:"The Rocks",r:4.1,rv:"~950",p:"$$",hl:"더 록스에서 가장 오래된 골목 켄달 레인의 10년 넘은 카페. 콜드브루·싱글오리진 에스프레소 등 커피에 자부심. 아보카도 토스트와 에그 요리가 호평.",w:"지역 특성상 일부 메뉴는 가격이 비싸다는 평.",q:"The Fine Food Store The Rocks Sydney"},
+    {n:"앰퍼샌드 카페 앤 북스토어",e:"Ampersand Cafe & Bookstore",a:"Paddington",r:4.2,rv:"~1,200",p:"$$",hl:"3층에 3만 권 이상의 책이 있는 서점형 카페. 아늑한 분위기가 최고의 매력. 에그 베네딕트와 배·패션프루트 리코타 프렌치 토스트가 인기.",w:"도심 위치라 가격대가 평균보다 높은 편.",q:"Ampersand Cafe Bookstore Paddington Sydney"},
+    {n:"카페 크레아지옹",e:"Cafe Cre Asion",a:"Chippendale",r:4.5,rv:"~600",p:"$$",hl:"2011년 문을 연 시드니 최초의 말차 전문 카페. 진짜 말차의 깊은 풍미. 부드러운 아이스 말차 라테와 말차 스위스롤·시폰 케이크가 시그니처.",w:"공간이 매우 작아 주말·피크엔 줄이 길고 대기가 있음.",q:"Cafe Cre Asion Chippendale Sydney"}
+  ],
+  bars: [
+    {n:"오페라 바",e:"Opera Bar",a:"Circular Quay",r:4.5,rv:"~12,000",p:"$$$",hl:"오페라 하우스와 하버브리지가 바로 앞에 펼쳐지는 세계 최고의 하버사이드 야외 바. 라이브 음악과 활기찬 분위기 속 칵테일 한잔이 극찬. 시드니 필수 코스.",w:"해질녘·공연 전 시간대엔 매우 붐비니 좋은 자리는 일찍 가거나 예약.",q:"Opera Bar Circular Quay Sydney"},
+    {n:"메이비 새미",e:"Maybe Sammy",a:"The Rocks",r:4.7,rv:"~3,200",p:"$$$$",hl:"월드 50 베스트 바에 오른 시드니 대표 칵테일 바. 1950년대 라스베이거스 감성 인테리어와 바텐더의 쇼맨십이 압권. 창의적 시그니처 칵테일.",w:"인기 시간대는 1~2주 전 예약 필수, 가격대가 다소 높은 편.",q:"Maybe Sammy The Rocks Sydney"},
+    {n:"백스터 인",e:"The Baxter Inn",a:"CBD",r:4.7,rv:"~3,700",p:"$$$",hl:"골목 지하에 숨은 1920년대 금주법 시대 분위기의 위스키 바. 사다리로 서빙하는 벽면 가득한 456종 위스키가 명물. 친절한 바텐더의 해박함.",w:"예약을 받지 않고 밤엔 매우 붐비니 입구 찾기 어려운 골목을 감안해 일찍.",q:"The Baxter Inn Clarence St Sydney"},
+    {n:"올드 메이트스 플레이스",e:"Old Mate's Place",a:"CBD",r:4.5,rv:"~1,700",p:"$$$",hl:"셜록 홈즈풍 서재 같은 실내와 도심 전망 루프탑을 갖춘 멀티레벨 히든 칵테일 바. 창의적 칵테일과 진·위스키, 지하 티키 바까지.",w:"루프탑까지 계단 102개(엘리베이터도 있음), 좋은 자리는 일찍.",q:"Old Mate's Place Clarence St Sydney"},
+    {n:"칸티나 오케이",e:"Cantina OK!",a:"CBD",r:4.8,rv:"~1,000",p:"$$$",hl:"주차 공간을 개조한 초소형 아가베 전문 바. 140여 종 메즈칼·테킬라와 세계 5대 칵테일로 꼽힌 '마르가리타 OK!'가 유명. 월드 50 베스트 바.",w:"좌석 없이 20명만 들어가는 스탠딩 바라 금세 붐비니 이른 시간에.",q:"Cantina OK Sydney"},
+    {n:"얼스 주크 조인트",e:"Earl's Juke Joint",a:"Newtown",r:4.5,rv:"~1,300",p:"$$$",hl:"정육점 간판 뒤에 숨은 뉴올리언스 감성의 뉴타운 인기 칵테일 바. 어두운 우드톤 인테리어와 좋은 음악, 디테일 살아있는 프리미엄 칵테일.",w:"간판이 정육점(Betta Meats)이라 입구를 놓치기 쉽고 주말 밤엔 매우 붐빔.",q:"Earl's Juke Joint Newtown Sydney"},
+    {n:"영 헨리스",e:"Young Henrys",a:"Newtown",r:4.6,rv:"~2,500",p:"$$",hl:"이너웨스트를 대표하는 독립 크래프트 브루어리 탭룸. 갓 뽑은 신선한 맥주와 사이다·진을 편안한 분위기에서. 힙한 뉴타운 감성.",w:"골목 안 산업단지에 있어 찾기 까다롭고 주말 오후엔 자리가 없을 만큼 붐빔.",q:"Young Henrys Newtown Sydney"},
+    {n:"러브, 틸리 디바인",e:"Love, Tilly Devine",a:"Darlinghurst",r:4.5,rv:"~800",p:"$$$",hl:"골목에 숨은 시드니 1세대 내추럴 와인 바. 300종 넘는 와인을 전부 글라스로. 식물로 가득한 아늑한 공간과 지식 풍부한 서비스로 데이트 명소.",w:"다크한 골목에 숨어 찾기 어렵고 음식 양은 가격 대비 아담한 편.",q:"Love Tilly Devine Darlinghurst Sydney"},
+    {n:"글렌모어 호텔",e:"The Glenmore Hotel",a:"The Rocks",r:4.2,rv:"~4,500",p:"$$$",hl:"1921년 지어진 헤리티지 펍. 오페라 하우스와 하버브리지가 한눈에 들어오는 180도 루프탑 전망이 최고. 편안한 분위기의 생맥주와 펍 요리.",w:"루프탑은 금세 만석이니 예약이 좋고, 크루즈선 정박 시 전망이 가릴 수 있음.",q:"The Glenmore Hotel The Rocks Sydney"},
+    {n:"스카이 바 앳 쉘 하우스",e:"Sky Bar at Shell House",a:"CBD",r:4.4,rv:"~900",p:"$$$$",hl:"복원된 쉘 하우스 10층의 뉴욕풍 럭셔리 루프탑 바. 개폐식 통유리창과 야외 테라스에서 도심 스카이라인이 시원하게. 우아한 인테리어.",w:"드레스코드는 스마트 캐주얼, 주말 밤엔 DJ로 음악이 커짐.",q:"Sky Bar Shell House Sydney"},
+    {n:"코트하우스 호텔 (더 코티)",e:"The Courthouse Hotel",a:"Newtown",r:4.3,rv:"~3,000",p:"$$",hl:"160년 넘게 뉴타운을 지켜온 격식 없는 동네 펍. 나무 그늘의 널찍한 비어가든이 시드니 최고 수준. 당구·핀볼·차가운 생맥주와 편안한 분위기.",w:"비어가든은 매우 붐벼 바 대기 줄이 길 수 있고 음식은 무난한 수준.",q:"Courthouse Hotel Newtown Sydney"}
+  ],
+  markets: [
+    {n:"패디스 마켓 (헤이마켓)",e:"Paddy's Markets",a:"Haymarket",r:4.2,rv:"~19,000",p:"$",hl:"차이나타운 옆 오래된 재래시장. 기념품과 저가 의류·잡화·액세서리를 시내 어디보다 저렴하게. 위층 푸드코트의 아시아 길거리 음식도 강추.",w:"수요일~일요일에만 열리니 월·화요일 방문은 피할 것.",q:"Paddy's Markets Haymarket Sydney"},
+    {n:"더 록스 마켓",e:"The Rocks Markets",a:"The Rocks",r:4.4,rv:"~6,300",p:"$$",hl:"하버 브리지 아래 자갈길 골목의 야외 마켓. 150여 부스에서 수제 가죽·공예품·주얼리·아트와 고급 길거리 음식. 하버 뷰와 라이브 음악.",w:"주말(토·일, 금 푸디 마켓)에만 열리고 가격대는 다소 높음.",q:"The Rocks Markets Sydney"},
+    {n:"캐리지웍스 파머스 마켓",e:"Carriageworks Farmers Market",a:"Eveleigh",r:4.5,rv:"~520",p:"$$",hl:"셰프가 큐레이션하는 시드니 최고의 프리미엄 파머스 마켓. 유기농 채소·꽃, 아티장 빵·치즈·꿀·와인을 시식하며. 미식가에게 사랑받음.",w:"토요일 오전(8시~오후 1시)만 열리며 일찍 갈수록 좋음.",q:"Carriageworks Farmers Market Sydney"},
+    {n:"글리브 마켓",e:"Glebe Markets",a:"Glebe",r:4.3,rv:"~2,700",p:"$",hl:"보헤미안 감성의 이너웨스트 대표 주말 마켓. 빈티지 의류와 로컬 디자이너 패션, 수제 주얼리, 길거리 음식이 다양. 라이브 음악과 여유로운 분위기.",w:"토요일 하루(오전 10시~오후 4시)만 열리고 주차가 어려움.",q:"Glebe Markets Sydney"},
+    {n:"본다이 마켓",e:"Bondi Markets",a:"Bondi Beach",r:4.3,rv:"~1,400",p:"$",hl:"본다이 해변 초등학교 운동장의 해변 감성 마켓. 로컬 디자이너 패션과 빈티지 의류, 주얼리, 아트, 길거리 음식·커피. 여유로운 분위기.",w:"패션·잡화 마켓은 일요일(오전 10시~오후 4시)에만 열림.",q:"Bondi Markets Bondi Beach Sydney"},
+    {n:"패딩턴 마켓",e:"Paddington Markets",a:"Paddington",r:4.3,rv:"~1,800",p:"$",hl:"패딩턴 교회 부지의 감각적인 마켓. 신진 호주 디자이너의 패션·주얼리·아트·수공예품이 많아 개성 있는 아이템을. 세련된 동네 분위기.",w:"토요일(오전 10시~오후 4시)에만 열림.",q:"Paddington Markets Sydney"},
+    {n:"차이나타운 나이트 마켓",e:"Chinatown Night Market",a:"Haymarket",r:4.2,rv:"~1,000",p:"$",hl:"매주 금요일 밤 40여 노점이 서는 아시아 길거리 음식 야시장. 만두·꼬치·로띠·타코야키·용수염사탕이 넘침. 활기찬 분위기와 저렴한 야식.",w:"금요일 저녁(5시~10시)에만 열리고 현금 준비 필요, 매우 붐빔.",q:"Chinatown Night Market Haymarket Sydney"},
+    {n:"로젤 컬렉터스 마켓",e:"Rozelle Collectors Market",a:"Rozelle",r:4.2,rv:"~920",p:"$",hl:"빈티지·앤티크·중고 보물찾기로 유명한 이너웨스트 마켓. 레코드와 골동품, 가구, 책, 잡화가 가득해 흥정하며 득템하는 재미. 로컬 벼룩시장 분위기.",w:"주말(토·일)에만 열리니 방문 요일 확인.",q:"Rozelle Collectors Market Sydney"},
+    {n:"웨스트필드 시드니",e:"Westfield Sydney",a:"CBD (Pitt St)",r:4.4,rv:"~18,000",p:"$$",hl:"피트 스트리트 몰 중심의 고급 대형 쇼핑몰. 명품부터 하이스트리트 브랜드, 백화점까지 280여 매장. 시드니 타워와 연결되고 다이닝이 풍부.",w:"여러 층으로 복잡해 길을 잃기 쉬우니 안내도 확인.",q:"Westfield Sydney Pitt Street"},
+    {n:"스트랜드 아케이드",e:"The Strand Arcade",a:"CBD",r:4.5,rv:"~3,200",p:"$$",hl:"1891년 개장한 시드니 유일의 빅토리아 양식 쇼핑 아케이드. 목조 계단과 유리 천장이 우아. 호주 신진 디자이너 부티크와 오랜 노포가 모임.",w:"규모는 크지 않으니 QVB·피트 스트리트 몰과 묶어서.",q:"The Strand Arcade Sydney"},
+    {n:"피트 스트리트 몰",e:"Pitt Street Mall",a:"CBD",r:4.4,rv:"~2,000",p:"$$",hl:"CBD 중심의 보행자 전용 쇼핑 거리. 웨스트필드·마이어·데이비드 존스 등 대형 매장과 브랜드가 밀집. 거리 공연을 즐기며 주요 쇼핑 명소로 이어짐.",w:"피크 시간대엔 매우 붐비고 휴식 공간이 부족한 편.",q:"Pitt Street Mall Sydney"}
+  ],
+  neighborhoods: [
+    {n:"시티 (CBD)",e:"City Centre",v:"쇼핑·비즈니스 중심",d:"QVB·피트 스트리트 몰·타운홀·세인트 메리 대성당·하이드 파크가 모인 중심가. 관광·쇼핑·교통이 모두 편리해 처음 방문하는 여행자의 베이스캠프로 좋습니다.",q:"Sydney CBD"},
+    {n:"더 록스",e:"The Rocks",v:"역사·마켓·펍",d:"시드니에서 가장 오래된 역사 지구. 자갈 골목과 식민지 시대 건물, 오래된 펍이 남아 있고 주말 마켓과 브리지클라임 출발점이 있어 역사와 분위기를 함께 즐기기 좋습니다.",q:"The Rocks Sydney"},
+    {n:"서큘러 키",e:"Circular Quay",v:"하버 뷰·교통 허브",d:"오페라 하우스와 하버브리지를 한눈에 보는 하버 프론트. 페리·기차·버스·경전철이 만나는 교통 허브로, 매너리·타롱가로 향하는 페리의 관문입니다.",q:"Circular Quay Sydney"},
+    {n:"달링 하버",e:"Darling Harbour",v:"가족·엔터테인먼트",d:"아쿠아리움·와일드라이프·마담 투소·해양 박물관·컨벤션 센터가 모인 가족 친화적 워터프론트. 아이 동반이나 저녁 산책·불꽃놀이에 인기입니다.",q:"Darling Harbour Sydney"},
+    {n:"서리 힐스",e:"Surry Hills",v:"브런치·힙스터",d:"감각적인 카페·브런치 맛집과 부티크, 소규모 바가 밀집한 힙한 이너시티 동네. 트렌디한 미식과 로컬 분위기를 원하는 젊은 여행자에게 잘 맞습니다.",q:"Surry Hills Sydney"},
+    {n:"뉴타운",e:"Newtown",v:"인디·다양성·펍",d:"킹 스트리트를 따라 그래피티 벽화, 빈티지 숍, 다국적 맛집, 라이브 음악과 펍이 이어지는 보헤미안 문화 중심지. 개성 있고 저렴한 세계 음식을 찾는 여행자에게 추천.",q:"Newtown Sydney"},
+    {n:"패딩턴",e:"Paddington",v:"부티크·테라스하우스",d:"우아한 빅토리아식 테라스 하우스와 옥스퍼드 스트리트의 패션 부티크·갤러리로 유명. 토요일 패딩턴 마켓과 함께 쇼핑·산책을 즐기기 좋습니다.",q:"Paddington Sydney"},
+    {n:"본다이",e:"Bondi",v:"해변·서핑",d:"호주에서 가장 유명한 해변으로 서핑, 아이스버그 수영장, 본다이-쿠지 산책로로 잘 알려짐. 서핑과 해변 문화, 활기찬 카페 분위기를 원하는 여행자에게 필수.",q:"Bondi Beach Sydney"},
+    {n:"매너리",e:"Manly",v:"페리·해변 마을",d:"서큘러 키에서 페리 30분 거리의 북부 해변 마을. 페리 자체가 하버브리지·오페라 하우스를 지나는 명소이며, 넓은 서핑 해변과 여유로운 분위기가 매력입니다.",q:"Manly Beach Sydney"},
+    {n:"차이나타운 / 헤이마켓",e:"Chinatown",v:"아시아 미식·야시장",d:"CBD 남쪽 아시아 미식 중심지. 딕슨 스트리트를 따라 딤섬·야시장·저렴한 맛집이 모임. 패디스 마켓과 가까워 아시아 음식과 야간 분위기를 찾기 좋습니다.",q:"Chinatown Haymarket Sydney"},
+    {n:"바랑가루",e:"Barangaroo",v:"럭셔리·파인다이닝",d:"CBD 서쪽 새로 개발된 럭셔리 워터프론트. 크라운 시드니 타워와 90여 고급 레스토랑·루프탑 바가 모임. 파인다이닝과 하버 뷰 산책, 세련된 밤 문화를.",q:"Barangaroo Sydney"},
+    {n:"글리브",e:"Glebe",v:"대학가·마켓·책방",d:"시드니 대학교 근처의 여유로운 이너웨스트 동네. 글리브 포인트 로드를 따라 헌책방·카페·아기자기한 상점이 이어지고 토요일 글리브 마켓이 유명합니다.",q:"Glebe Sydney"},
+    {n:"이스트우드 / 스트라스필드",e:"Koreatown",v:"한식·코리아타운",d:"시드니 한인 커뮤니티 중심지. 정통 코리안 BBQ·감자탕·분식과 한인 마트·카페가 밀집. 특히 스트라스필드는 역에서 나오자마자 한국 식당이 줄지어 있습니다.",q:"Strathfield Sydney Koreatown"}
+  ],
+  practical: [
+    {ic:"🚆",t:"오팔(Opal) 카드 & 교통",b:"기차·메트로·버스·페리·경전철을 하나의 시스템으로 이용하며, 탑승 시 태그온·하차 시 태그오프합니다. 오팔 카드나 컨택리스 신용·체크카드, 스마트폰(애플/구글페이)을 그대로 태그해도 같은 요금입니다. 하루 상한은 월~목 약 A$19.30, 금~일·공휴일 약 A$9.65, 주간 상한은 약 A$50."},
+    {ic:"✈️",t:"공항에서 시내 가기",b:"가장 빠른 건 에어포트 링크 기차로 센트럴역까지 약 13분, 서큘러 키까지 약 18분, 대개 10분 간격 운행. 단 공항역 이용료(약 A$18~19)가 붙어 시내까지 총 A$20~30이며 요금 상한에 미포함. 절약하려면 420번 버스로 매스콧역 환승, 또는 택시·우버(약 A$45~60)."},
+    {ic:"💳",t:"화폐 & 팁",b:"통화는 호주 달러(AUD)이며 카드·컨택리스 결제가 매우 보편적이라 현금 없이도 대부분 해결됩니다. 팁은 강제되지 않으며 서비스가 훌륭했을 때 레스토랑에서 약 10% 정도면 충분합니다. 택시·카페 팁은 의무가 아닙니다."},
+    {ic:"🔌",t:"전기 플러그 & 전압",b:"230V(실제 약 240V)·50Hz를 사용하며 플러그는 팔자(八) 모양의 Type I 방식입니다. 한국 가전은 플러그 모양이 다르니 멀티어댑터가 필요합니다. 휴대폰·노트북 충전기는 대부분 프리볼트라 어댑터만 있으면 되지만, 헤어드라이어 등도 플러그 모양은 어댑터로 맞춰야 합니다."},
+    {ic:"☀️",t:"자외선 & 선크림 필수",b:"호주는 자외선(UV) 지수가 매우 높아 여름철엔 짧은 시간에도 화상을 입기 쉽습니다. SPF30+ 이상 선크림과 모자·선글라스를 착용하고 한낮(오전 10시~오후 3시) 강한 햇볕을 피하세요. 'Slip, Slop, Slap'처럼 옷·선크림·모자로 피부를 보호하세요."},
+    {ic:"🚨",t:"긴급 전화번호",b:"경찰·소방·구급 등 모든 긴급 상황은 000(트리플 제로)으로 전화하면 됩니다. 무료이며 휴대폰에서도 사용 가능합니다. 긴급하지 않은 경찰 업무는 131 444(Police Assistance Line)를 이용하세요."},
+    {ic:"🌤️",t:"계절별 날씨 (남반구)",b:"남반구라 한국과 계절이 반대입니다. 여름(12~2월)은 덥고 습하며 보통 18~28도, 종종 30도 후반까지. 가을(3~5월)은 온화하고, 겨울(6~8월)은 9~19도로 쌀쌀하지만 온화하며, 봄(9~11월)은 11~23도로 쾌적합니다."},
+    {ic:"📅",t:"방문하기 좋은 시기",b:"여행하기 가장 좋은 시기는 봄(9~11월)과 가을(3~5월)로 날씨가 온화하고 관광객이 적으며 항공·숙박도 비교적 저렴합니다. 해변 물놀이는 12~3월 여름이 좋고, 겨울(5월 말~6월 중순)엔 도시가 빛으로 물드는 비비드 시드니 축제를 즐길 수 있습니다."},
+    {ic:"🛡️",t:"치안 & 안전",b:"전반적으로 안전한 도시지만 야간엔 사람이 적은 골목이나 킹스크로스 일대에서 소지품에 주의하세요. 해변에서는 반드시 빨강·노랑 깃발 사이(라이프가드 감시 구역)에서 수영하고 이안류(rip current)에 유의해야 합니다."},
+    {ic:"📱",t:"심(SIM)카드 & 인터넷",b:"주요 통신사는 텔스트라·옵터스·보다폰이며, 근교·시골까지 간다면 텔스트라 커버리지가 가장 넓습니다. 선불 심은 보통 28일 기준 A$30~60이며 콜스·울워스·7-일레븐에서 구입 가능(공항은 다소 비쌈). 개통 시 여권이 필요하고 eSIM으로 미리 준비하면 편리합니다."},
+    {ic:"📲",t:"유용한 앱",b:"대중교통 경로·실시간 정보는 Opal Travel·TripView·Transport NSW 앱이 유용합니다. 이동은 Uber·DiDi·Ola 등 차량 호출 앱, 지도·길찾기는 Google Maps가 편리합니다. 날씨·자외선 확인은 BOM Weather 앱을 추천합니다."}
+  ]
+};
+
+const SECTIONS = [
+  {id:"spots",     icon:"🌉", title:"명소 & 랜드마크", sub:"시드니 하면 떠오르는 대표 스팟들.",              key:"landmarks", type:"place"},
+  {id:"beaches",   icon:"🏖️", title:"해변 & 자연",     sub:"해변·해안 산책로·공원. 대부분 무료예요.",         key:"beaches",   type:"place"},
+  {id:"daytrips",  icon:"🚌", title:"근교 당일치기",   sub:"시드니에서 하루 코스로 다녀올 수 있는 곳.",       key:"daytrips",  type:"place"},
+  {id:"seafood",   icon:"🦞", title:"씨푸드 & 파인다이닝", sub:"해산물과 특별한 날의 파인다이닝.",             key:"seafood",   type:"place"},
+  {id:"asian",     icon:"🍜", title:"아시안 · 한식 · 가성비", sub:"현지인이 사랑하는 아시안·한식·저렴한 맛집.",   key:"asian",     type:"place"},
+  {id:"cafes",     icon:"☕", title:"카페 & 브런치",   sub:"커피 문화가 강한 도시. 브런치 성지들.",           key:"cafes",     type:"place"},
+  {id:"bars",      icon:"🍸", title:"바 & 나이트라이프", sub:"루프탑·칵테일·펍. 시드니의 밤.",                 key:"bars",      type:"place"},
+  {id:"markets",   icon:"🛍️", title:"마켓 & 쇼핑",     sub:"주말 마켓과 쇼핑 아케이드.",                     key:"markets",   type:"place"},
+  {id:"hoods",     icon:"🏘️", title:"동네 가이드",     sub:"어디에 묵고 어디를 걸을지 정할 때.",             key:"neighborhoods", type:"hood"},
+  {id:"tips",      icon:"💡", title:"실용정보",       sub:"교통·환전·안전 등 알아두면 좋은 정보.",           key:"practical", type:"tip"}
+];
+
+const mapUrl = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q + " Sydney");
+const ratingClass = r => r >= 4.6 ? "" : (r >= 4.3 ? "mid" : "low");
+const el = (tag, cls, html) => { const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; };
+const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function placeCard(x){
+  const c = el("div","card");
+  c.dataset.search = (x.n+" "+x.e+" "+x.a+" "+x.hl+" "+x.p).toLowerCase();
+  c.innerHTML = `
+    <div class="top">
+      <div><h3>${esc(x.n)}</h3><div class="en">${esc(x.e)}</div></div>
+      <div class="rating ${ratingClass(x.r)}"><span class="num">${x.r}</span><span class="rev">${esc(x.rv)}</span></div>
+    </div>
+    <div class="meta-row">
+      <span class="pill area">📍 ${esc(x.a)}</span>
+      <span class="pill price">${esc(x.p)}</span>
+    </div>
+    <p class="hl">${esc(x.hl)}</p>
+    <p class="watch">${esc(x.w)}</p>
+    <a class="go" href="${mapUrl(x.q)}" target="_blank" rel="noopener">구글 지도에서 보기</a>`;
+  return c;
+}
+function hoodCard(x){
+  const c = el("div","hood");
+  c.dataset.search = (x.n+" "+x.e+" "+x.v+" "+x.d).toLowerCase();
+  c.innerHTML = `
+    <h3>${esc(x.n)}</h3><div class="en">${esc(x.e)}</div>
+    <span class="vibe">${esc(x.v)}</span>
+    <p>${esc(x.d)}</p>
+    <a class="go" href="${mapUrl(x.q)}" target="_blank" rel="noopener">지도에서 보기 ↗</a>`;
+  return c;
+}
+function tipCard(x){
+  const c = el("div","tip");
+  c.dataset.search = (x.t+" "+x.b).toLowerCase();
+  c.innerHTML = `<h3><span class="ic">${x.ic}</span>${esc(x.t)}</h3><p>${esc(x.b)}</p>`;
+  return c;
+}
+
+// build stats
+const totalPlaces = ["landmarks","beaches","daytrips","seafood","asian","cafes","bars","markets"].reduce((n,k)=>n+DATA[k].length,0);
+const statsEl = document.getElementById("stats");
+[["장소",totalPlaces+"+"],["카테고리","10"],["동네",DATA.neighborhoods.length],["실용팁",DATA.practical.length]].forEach(([lbl,val])=>{
+  statsEl.appendChild(el("div","stat",`<b>${val}</b><span>${lbl}</span>`));
+});
+
+// build nav + sections
+const catsEl = document.getElementById("cats");
+const mainEl = document.getElementById("main");
+SECTIONS.forEach(s=>{
+  const a = el("a",null,`${s.icon} ${s.title}`); a.href = "#"+s.id; catsEl.appendChild(a);
+
+  const sec = el("section"); sec.id = s.id; sec.dataset.section = s.key;
+  const head = el("div","sec-head");
+  head.appendChild(el("h2",null,`${s.icon} ${s.title}`));
+  const list = DATA[s.key];
+  head.appendChild(el("span","count",`${list.length}곳`));
+  sec.appendChild(head);
+  sec.appendChild(el("p","sec-sub",s.sub));
+
+  let container;
+  if(s.type==="place"){ container = el("div","grid"); list.forEach(x=>container.appendChild(placeCard(x))); }
+  else if(s.type==="hood"){ container = el("div","hoods"); list.forEach(x=>container.appendChild(hoodCard(x))); }
+  else { container = el("div","tips"); list.forEach(x=>container.appendChild(tipCard(x))); }
+  sec.appendChild(container);
+  mainEl.appendChild(sec);
+});
+
+// search filter
+const search = document.getElementById("search");
+const noresult = document.getElementById("noresult");
+search.addEventListener("input", ()=>{
+  const q = search.value.trim().toLowerCase();
+  let anyVisible = false;
+  document.querySelectorAll("section").forEach(sec=>{
+    let visibleInSec = 0;
+    sec.querySelectorAll("[data-search]").forEach(card=>{
+      const match = !q || card.dataset.search.includes(q);
+      card.style.display = match ? "" : "none";
+      if(match) visibleInSec++;
+    });
+    sec.style.display = visibleInSec ? "" : "none";
+    if(visibleInSec) anyVisible = true;
+    const cnt = sec.querySelector(".count");
+    if(cnt) cnt.textContent = q ? `${visibleInSec}곳` : `${DATA[sec.dataset.section].length}곳`;
+  });
+  noresult.style.display = anyVisible ? "none" : "block";
+});
+</script>
+</body>
+</html>
